@@ -1,0 +1,10 @@
+{
+  "name": "printshop",
+  "private": true,
+  "scripts": {
+    "dev:server": "node server/index.js",
+    "dev:client": "npm run dev --prefix client",
+    "seed": "node server/db/seed.js",
+    "install:all": "npm install && npm install --prefix client"
+  }
+}
