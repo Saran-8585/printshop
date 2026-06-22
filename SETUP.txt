@@ -1,0 +1,120 @@
+================================================================================
+  PRINTSHOP - Setup Guide
+  Full-stack e-commerce system for stickers and posters
+  Built with React, Express, and MongoDB
+================================================================================
+
+
+PREREQUISITES
+--------------------------------------------------------------------------------
+  - Node.js v22+
+  - npm v10+
+  - Docker & Docker Compose (recommended) or MongoDB 7+ (local)
+
+
+QUICK START (Docker - Recommended)
+--------------------------------------------------------------------------------
+  1. Start all services:
+
+      docker compose up -d
+
+  2. Seed the database with sample data:
+
+      docker compose exec backend node db/seed.js
+
+  3. Open in browser:
+      Frontend: http://localhost:3000
+      API:      http://localhost:5000/api/health
+
+  Demo Credentials:
+      Admin:    admin@printshop.com / admin123
+      Customer: customer1@printshop.com / cust123
+
+
+DEVELOPMENT (Local, No Docker)
+--------------------------------------------------------------------------------
+  1. Install dependencies:
+
+      npm run install:all
+
+  2. Start MongoDB on port 27017.
+
+  3. Seed the database:
+
+      npm run seed
+
+  4. Start the backend:
+
+      npm run dev:server
+      API at http://localhost:5000
+
+  5. Start the frontend (separate terminal):
+
+      npm run dev:client
+      Frontend at http://localhost:3000
+
+
+PRODUCTION BUILD
+--------------------------------------------------------------------------------
+  docker compose -f docker-compose.prod.yml up -d
+  docker compose -f docker-compose.prod.yml exec app node server/db/seed.js
+  Open http://localhost:5000
+
+
+PROJECT STRUCTURE
+--------------------------------------------------------------------------------
+  printshop/
+  +-- client/                  React + Vite frontend
+  |   +-- src/
+  |   |   +-- components/      UI components
+  |   |   +-- context/         AuthContext, CartContext
+  |   |   +-- pages/           Page components
+  |   |   +-- utils/           Axios config
+  |   +-- vite.config.js
+  |   +-- Dockerfile.dev
+  +-- server/                  Express API backend
+  |   +-- controllers/         Route handlers (Mongoose)
+  |   +-- db/                  Database connection & seed
+  |   +-- middleware/          Auth, file upload
+  |   +-- models/              Mongoose schemas
+  |   +-- routes/              Express routes
+  |   +-- uploads/             User-uploaded files
+  +-- Dockerfile               Multi-stage production build
+  +-- Dockerfile.dev           Dev backend image
+  +-- docker-compose.yml       Dev environment (3 services)
+  +-- docker-compose.prod.yml  Production environment
+  +-- .env                     Environment variables
+
+
+ENVIRONMENT VARIABLES (server/.env)
+--------------------------------------------------------------------------------
+  PORT             Default: 5000               API server port
+  JWT_SECRET       Default: printshop_jwt_se... JWT signing secret
+  UPLOAD_DIR       Default: uploads            File upload directory
+  MONGODB_URI      Default: mongodb://local...  MongoDB connection string
+
+
+API ENDPOINTS
+--------------------------------------------------------------------------------
+  POST   /api/auth/register         No      Register new user
+  POST   /api/auth/login            No      Login, returns JWT
+  GET    /api/auth/me               JWT     Current user profile
+  GET    /api/products              No      List products
+  GET    /api/products/:id          No      Product details
+  GET    /api/products/:id/reviews  No      Product reviews
+  POST   /api/products              Admin   Create product
+  PUT    /api/products/:id          Admin   Update product
+  PATCH  /api/products/:id/status   Admin   Toggle active/inactive
+  GET    /api/pricing/:productId    No      Price calculation
+  POST   /api/orders                JWT     Create order
+  GET    /api/orders/my             JWT     User's orders
+  GET    /api/orders/               Admin   All orders
+  GET    /api/orders/:id            JWT     Order detail
+  PATCH  /api/orders/:id/status     Admin   Update order status
+  PATCH  /api/orders/:id/cancel     JWT     Cancel order
+  GET    /api/orders/:id/invoice    JWT     Download PDF invoice
+  POST   /api/coupons/validate      No      Validate coupon
+  POST   /api/upload/design         JWT     Upload design file
+  GET    /api/dashboard/admin       Admin   Dashboard analytics
+  GET    /api/addresses             JWT     User's addresses
+  GET    /api/health                No      Health check

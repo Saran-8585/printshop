@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import db from '../db/database.js';
+import User from '../models/User.js';
 
 export async function register(req, res) {
   try {
@@ -8,15 +8,18 @@ export async function register(req, res) {
     if (!name || !email || !password) {
       return res.status(400).json({ error: 'Name, email and password are required' });
     }
-    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+    const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
       return res.status(400).json({ error: 'Email already registered' });
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const result = db.prepare('INSERT INTO users (name, email, password, phone, role) VALUES (?, ?, ?, ?, ?)').run(name, email, hashedPassword, phone || '', 'customer');
-    const token = jwt.sign({ id: result.lastInsertRowid, email, role: 'customer' }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.status(201).json({ token, user: { id: result.lastInsertRowid, name, email, phone: phone || '', role: 'customer' } });
+    const user = await User.create({ name, email: email.toLowerCase(), password: hashedPassword, phone: phone || '', role: 'customer' });
+    const token = jwt.sign({ id: user._id.toString(), email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    res.status(201).json({ token, user: { id: user._id.toString(), name: user.name, email: user.email, phone: user.phone || '', role: user.role } });
   } catch (err) {
+    if (err.code === 11000) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
     res.status(500).json({ error: 'Registration failed' });
   }
 }
@@ -27,7 +30,7 @@ export async function login(req, res) {
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
     }
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
@@ -35,20 +38,21 @@ export async function login(req, res) {
     if (!valid) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } });
+    const token = jwt.sign({ id: user._id.toString(), email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { id: user._id.toString(), name: user.name, email: user.email, phone: user.phone, role: user.role } });
   } catch (err) {
+    console.error('Login error:', err);
     res.status(500).json({ error: 'Login failed' });
   }
 }
 
 export async function getMe(req, res) {
   try {
-    const user = db.prepare('SELECT id, name, email, phone, role, created_at FROM users WHERE id = ?').get(req.user.id);
+    const user = await User.findById(req.user.id).select('id name email phone role created_at');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.json(user);
+    res.json(user.toObject());
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch user' });
   }

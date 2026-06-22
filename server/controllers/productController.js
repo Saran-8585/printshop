@@ -1,121 +1,103 @@
-import db from '../db/database.js';
+import Product from '../models/Product.js';
+import PricingRule from '../models/PricingRule.js';
+import Review from '../models/Review.js';
 
-export function listProducts(req, res) {
+export async function listProducts(req, res) {
   try {
     const { category, status, sort, minPrice, maxPrice, finish } = req.query;
-    let sql = 'SELECT * FROM products WHERE 1=1';
-    const params = [];
-
-    if (category) {
-      sql += ' AND category = ?';
-      params.push(category);
+    const filter = {};
+    if (category) filter.category = category;
+    if (status) filter.status = status;
+    else filter.status = 'active';
+    if (minPrice || maxPrice) {
+      filter.base_price = {};
+      if (minPrice) filter.base_price.$gte = Number(minPrice);
+      if (maxPrice) filter.base_price.$lte = Number(maxPrice);
     }
-    if (status) {
-      sql += ' AND status = ?';
-      params.push(status);
-    } else {
-      sql += " AND status = 'active'";
-    }
-    if (minPrice) {
-      sql += ' AND base_price >= ?';
-      params.push(Number(minPrice));
-    }
-    if (maxPrice) {
-      sql += ' AND base_price <= ?';
-      params.push(Number(maxPrice));
-    }
-    if (finish) {
-      sql += ' AND available_finishes LIKE ?';
-      params.push(`%${finish}%`);
-    }
-
+    if (finish) filter.available_finishes = { $regex: finish, $options: 'i' };
     const allowedSort = {
-      'price_asc': 'base_price ASC',
-      'price_desc': 'base_price DESC',
-      'popular': 'order_count DESC',
-      'newest': 'created_at DESC',
-      'rating': 'avg_rating DESC'
+      price_asc: { base_price: 1 },
+      price_desc: { base_price: -1 },
+      popular: { order_count: -1 },
+      newest: { created_at: -1 },
+      rating: { avg_rating: -1 }
     };
-    sql += ' ORDER BY ' + (allowedSort[sort] || 'order_count DESC');
-
-    const products = db.prepare(sql).all(...params);
+    const sortOption = allowedSort[sort] || { order_count: -1 };
+    const products = await Product.find(filter).sort(sortOption);
     res.json(products);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 }
 
-export function getProduct(req, res) {
+export async function getProduct(req, res) {
   try {
-    const product = db.prepare('SELECT * FROM products WHERE id = ?').get(req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    // Parse JSON fields for response
-    product.available_sizes = JSON.parse(product.available_sizes || '[]');
-    product.available_finishes = JSON.parse(product.available_finishes || '[]');
-    res.json(product);
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ error: 'Product not found' });
+    res.json(product.toObject());
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch product' });
   }
 }
 
-export function createProduct(req, res) {
+export async function createProduct(req, res) {
   try {
     const { name, category, description, base_price, turnaround_time, available_sizes, available_finishes, status } = req.body;
-    const result = db.prepare(
-      'INSERT INTO products (name, category, description, base_price, turnaround_time, available_sizes, available_finishes, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-    ).run(
-      name, category, description || '', Number(base_price), turnaround_time || '3-5 business days',
-      JSON.stringify(available_sizes || []), JSON.stringify(available_finishes || []), status || 'active'
-    );
-
-    // Add default pricing rules
-    const pid = result.lastInsertRowid;
-    const rules = db.prepare('INSERT INTO pricing_rules (product_id, min_qty, max_qty, discount_percent) VALUES (?, ?, ?, ?)');
-    rules.run(pid, 1, 4, 0);
-    rules.run(pid, 5, 9, 10);
-    rules.run(pid, 10, 24, 18);
-    rules.run(pid, 25, 999999, 25);
-
-    res.status(201).json({ id: pid, message: 'Product created' });
+    const product = await Product.create({
+      name,
+      category,
+      description: description || '',
+      base_price: Number(base_price),
+      turnaround_time: turnaround_time || '3-5 business days',
+      available_sizes: available_sizes || [],
+      available_finishes: available_finishes || [],
+      status: status || 'active',
+    });
+    const pid = product._id;
+    const defaultRules = [
+      { product: pid, min_qty: 1, max_qty: 4, discount_percent: 0 },
+      { product: pid, min_qty: 5, max_qty: 9, discount_percent: 10 },
+      { product: pid, min_qty: 10, max_qty: 24, discount_percent: 18 },
+      { product: pid, min_qty: 25, max_qty: 999999, discount_percent: 25 },
+    ];
+    await PricingRule.insertMany(defaultRules);
+    res.status(201).json({ id: pid.toString(), message: 'Product created' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to create product' });
   }
 }
 
-export function updateProduct(req, res) {
+export async function updateProduct(req, res) {
   try {
     const { name, category, description, base_price, turnaround_time, available_sizes, available_finishes } = req.body;
-    db.prepare(
-      'UPDATE products SET name=?, category=?, description=?, base_price=?, turnaround_time=?, available_sizes=?, available_finishes=? WHERE id=?'
-    ).run(
-      name, category, description, Number(base_price), turnaround_time,
-      JSON.stringify(available_sizes || []), JSON.stringify(available_finishes || []), req.params.id
-    );
+    await Product.findByIdAndUpdate(req.params.id, {
+      name, category, description, base_price: Number(base_price), turnaround_time,
+      available_sizes: available_sizes || [],
+      available_finishes: available_finishes || [],
+    });
     res.json({ message: 'Product updated' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to update product' });
   }
 }
 
-export function toggleProductStatus(req, res) {
+export async function toggleProductStatus(req, res) {
   try {
-    const product = db.prepare('SELECT * FROM products WHERE id = ?').get(req.params.id);
+    const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: 'Product not found' });
     const newStatus = product.status === 'active' ? 'inactive' : 'active';
-    db.prepare('UPDATE products SET status = ? WHERE id = ?').run(newStatus, req.params.id);
+    await Product.findByIdAndUpdate(req.params.id, { status: newStatus });
     res.json({ status: newStatus });
   } catch (err) {
     res.status(500).json({ error: 'Failed to update status' });
   }
 }
 
-export function getProductReviews(req, res) {
+export async function getProductReviews(req, res) {
   try {
-    const reviews = db.prepare(
-      'SELECT r.*, u.name as user_name FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.product_id = ? ORDER BY r.created_at DESC'
-    ).all(req.params.id);
+    const reviews = await Review.find({ product: req.params.id })
+      .populate('user', 'name')
+      .sort({ created_at: -1 });
     res.json(reviews);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch reviews' });

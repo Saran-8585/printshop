@@ -1,9 +1,13 @@
-import 'dotenv/config';
-import express from 'express';
-import cors from 'cors';
+import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { initDatabase } from './db/database.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+import express from 'express';
+import cors from 'cors';
+import { connectDB } from './db/database.js';
 
 import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
@@ -14,10 +18,6 @@ import orderRoutes from './routes/orders.js';
 import reviewRoutes from './routes/reviews.js';
 import dashboardRoutes from './routes/dashboard.js';
 import addressRoutes from './routes/addresses.js';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-initDatabase();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -38,11 +38,24 @@ app.use('/api/addresses', addressRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
+const clientDistPath = path.join(__dirname, '..', 'client', 'dist');
+app.use(express.static(clientDistPath));
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  }
+});
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+async function start() {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+start();

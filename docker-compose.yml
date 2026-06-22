@@ -1,0 +1,54 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: printshop-mongo
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - printshop-net
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: ../Dockerfile.dev
+    container_name: printshop-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - ./server/.env
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/printshop
+    depends_on:
+      - mongo
+    networks:
+      - printshop-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: printshop-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://backend:5000
+    depends_on:
+      - backend
+    networks:
+      - printshop-net
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
+
+networks:
+  printshop-net:
+    driver: bridge
