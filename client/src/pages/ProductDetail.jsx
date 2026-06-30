@@ -49,7 +49,7 @@ function OptionTile({ selected, onClick, label, sublabel, disabled }) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`px-4 py-3 rounded-xl text-sm font-medium border-2 transition-all text-left ${
+      className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all text-left ${
         selected
           ? 'border-accent bg-accent/5 text-accent'
           : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
@@ -413,7 +413,7 @@ export default function ProductDetail() {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">5. Quantity</label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                     {[10, 25, 50, 100, 250, 500].map(q => (
                       <OptionTile key={q} selected={config.quantity === q} onClick={() => updateConfig('quantity', q)} label={q.toString()} />
                     ))}
@@ -465,7 +465,7 @@ export default function ProductDetail() {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">6. Quantity</label>
-                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                     {[50, 100, 250, 500, 1000].map(q => (
                       <OptionTile key={q} selected={config.quantity === q} onClick={() => updateConfig('quantity', q)} label={q.toString()} />
                     ))}
@@ -511,7 +511,7 @@ export default function ProductDetail() {
             <div className="sticky top-20 bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
               {discountPercent > 0 && (
                 <div className="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                  You save {discountPercent}% 🎉
+                  You save {discountPercent}%
                 </div>
               )}
 
@@ -552,7 +552,7 @@ export default function ProductDetail() {
               <button
                 onClick={handleAddToCart}
                 disabled={!pricing || pricingLoading}
-                className="w-full mt-4 bg-accent text-white py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full mt-4 bg-accent text-white py-2.5 rounded-lg font-semibold hover:bg-accent-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {pricingLoading ? (
                   <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />

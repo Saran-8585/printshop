@@ -49,7 +49,7 @@ export default function OrderConfirmation() {
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
         <CheckCircle className="w-8 h-8 text-green-600" />
       </div>
-      <h1 className="text-3xl font-bold mb-2">Order Confirmed! 🎉</h1>
+      <h1 className="text-3xl font-bold mb-2">Order Confirmed!</h1>
       <p className="text-gray-500 mb-6">Thank you for your order, {order.customer_name}!</p>
 
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-8 text-left">

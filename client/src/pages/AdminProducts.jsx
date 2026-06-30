@@ -123,7 +123,7 @@ export default function AdminProducts() {
         <h1 className="text-2xl font-bold">Products</h1>
         <div className="flex gap-2">
           <button onClick={openPricing} className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50">Pricing Rules</button>
-          <button onClick={openAdd} className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover">
+          <button onClick={openAdd} className="flex items-center gap-2 bg-accent text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-accent-hover">
             <Plus className="w-4 h-4" /> Add Product
           </button>
         </div>

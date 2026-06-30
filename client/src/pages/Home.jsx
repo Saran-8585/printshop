@@ -59,10 +59,10 @@ export default function Home() {
               Upload your design, choose your finish, and we deliver.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/products/posters" className="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-lg font-semibold text-lg transition-colors inline-flex items-center gap-2">
+              <Link to="/products/posters" className="bg-accent hover:bg-accent-hover text-white px-6 py-2.5 rounded-lg font-semibold text-lg transition-colors inline-flex items-center gap-2">
                 Shop Posters <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link to="/products/stickers" className="bg-white/10 hover:bg-white/20 text-white px-8 py-3.5 rounded-lg font-semibold text-lg transition-colors border border-white/20 inline-flex items-center gap-2">
+              <Link to="/products/stickers" className="bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-lg font-semibold text-lg transition-colors border border-white/20 inline-flex items-center gap-2">
                 Shop Stickers <ChevronRight className="w-5 h-5" />
               </Link>
             </div>
@@ -130,7 +130,7 @@ export default function Home() {
                 <p className="text-gray-500 mt-1">Most popular products this month</p>
               </div>
             </div>
-            <div className="flex gap-6 overflow-x-auto pb-4 -mx-4 px-4 snap-x">
+            <div className="flex gap-6 overflow-x-auto pb-4 snap-x">
               {bestSellers.slice(0, 6).map(product => (
                 <Link
                   key={product.id}

@@ -154,7 +154,7 @@ export default function CartDrawer() {
                 <Link
                   to="/checkout"
                   onClick={() => setDrawerOpen(false)}
-                  className="block w-full bg-accent text-white text-center py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors"
+                  className="block w-full bg-accent text-white text-center py-2.5 rounded-lg font-semibold hover:bg-accent-hover transition-colors"
                 >
                   Proceed to Checkout
                 </Link>

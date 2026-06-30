@@ -47,7 +47,7 @@ export default function AdminDashboard() {
           <div key={i} className="bg-white rounded-xl border border-gray-200 p-5">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm text-gray-500">{card.label}</span>
-              <div className={`w-10 h-10 ${card.color} bg-opacity-10 rounded-lg flex items-center justify-center`}>
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${card.color.replace('bg-', 'bg-')}/10`}>
                 <card.icon className={`w-5 h-5 ${card.color.replace('bg-', 'text-')}`} />
               </div>
             </div>

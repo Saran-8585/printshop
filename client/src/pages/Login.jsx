@@ -69,20 +69,28 @@ export default function Login() {
         <div className="mt-6 bg-gray-50 rounded-xl border border-gray-200 p-4">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Demo Accounts</p>
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm">
+            <button
+              type="button"
+              onClick={() => { setEmail('admin@printshop.com'); setPassword('admin123'); }}
+              className="w-full flex items-center justify-between text-sm p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer text-left"
+            >
               <div>
                 <span className="font-medium text-gray-700">Admin</span>
                 <span className="text-gray-500 ml-2">admin@printshop.com</span>
               </div>
               <span className="text-gray-400 font-mono text-xs">admin123</span>
-            </div>
-            <div className="flex items-center justify-between text-sm">
+            </button>
+            <button
+              type="button"
+              onClick={() => { setEmail('customer1@printshop.com'); setPassword('cust123'); }}
+              className="w-full flex items-center justify-between text-sm p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer text-left"
+            >
               <div>
                 <span className="font-medium text-gray-700">Customer</span>
                 <span className="text-gray-500 ml-2">customer1@printshop.com</span>
               </div>
               <span className="text-gray-400 font-mono text-xs">cust123</span>
-            </div>
+            </button>
           </div>
         </div>
       </div>

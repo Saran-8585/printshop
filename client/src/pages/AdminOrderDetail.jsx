@@ -162,7 +162,7 @@ export default function AdminOrderDetail() {
                 <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
               ))}
             </select>
-            <button onClick={updateStatus} className="w-full bg-accent text-white py-2 rounded-lg text-sm font-medium hover:bg-accent-hover">
+            <button onClick={updateStatus} className="w-full bg-accent text-white py-2.5 rounded-lg text-sm font-medium hover:bg-accent-hover">
               Save
             </button>
           </div>
@@ -175,7 +175,7 @@ export default function AdminOrderDetail() {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-accent outline-none resize-none"
               rows={4}
             />
-            <button onClick={updateStatus} className="mt-2 w-full bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200">
+            <button onClick={updateStatus} className="mt-2 w-full bg-gray-100 text-gray-700 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-200">
               Save Notes
             </button>
           </div>

@@ -235,7 +235,7 @@ export default function Checkout() {
           </div>
 
           <div className="flex gap-3 justify-end">
-            <button onClick={() => setStep(0)} className="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
+            <button onClick={() => setStep(0)} className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
             <button onClick={() => setStep(2)} className="bg-accent text-white px-6 py-2.5 rounded-lg font-medium hover:bg-accent-hover flex items-center gap-2">
@@ -317,13 +317,13 @@ export default function Checkout() {
           </div>
 
           <div className="flex gap-3 justify-end">
-            <button onClick={() => setStep(1)} className="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
+            <button onClick={() => setStep(1)} className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
             <button
               onClick={handlePlaceOrder}
               disabled={placing}
-              className="bg-accent text-white px-8 py-2.5 rounded-lg font-semibold hover:bg-accent-hover disabled:opacity-50 flex items-center gap-2"
+              className="bg-accent text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-accent-hover disabled:opacity-50 flex items-center gap-2"
             >
               {placing ? (
                 <><span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" /> Placing Order...</>

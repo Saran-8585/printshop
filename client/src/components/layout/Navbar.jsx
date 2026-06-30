@@ -80,7 +80,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="text-sm font-medium text-white bg-accent hover:bg-accent-hover px-4 py-2 rounded-lg transition-colors"
+                className="text-sm font-medium text-white bg-accent hover:bg-accent-hover px-5 py-2.5 rounded-lg transition-colors"
               >
                 Sign In
               </Link>

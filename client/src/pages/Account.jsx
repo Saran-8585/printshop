@@ -288,7 +288,7 @@ function ProfileSection() {
             <input type="text" value={profile.phone} onChange={e => setProfile({...profile, phone: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-accent outline-none" />
           </div>
         </div>
-        <button onClick={updateProfile} className="mt-4 bg-accent text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover">Save Changes</button>
+        <button onClick={updateProfile} className="mt-4 bg-accent text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-accent-hover">Save Changes</button>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl p-6">
@@ -307,7 +307,7 @@ function ProfileSection() {
             <input type="password" value={password.confirm} onChange={e => setPassword({...password, confirm: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-accent outline-none" />
           </div>
         </div>
-        <button className="mt-4 bg-gray-100 text-gray-700 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-200">Update Password</button>
+        <button className="mt-4 bg-gray-100 text-gray-700 px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-200">Update Password</button>
       </div>
     </div>
   );
@@ -371,7 +371,7 @@ function ReviewsSection() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-accent outline-none resize-none"
                       rows={2}
                     />
-                    <button onClick={() => submit(item.product_id, item.id)} className="bg-accent text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-accent-hover">
+                    <button onClick={() => submit(item.product_id, item.id)} className="bg-accent text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover">
                       Submit Review
                     </button>
                   </div>

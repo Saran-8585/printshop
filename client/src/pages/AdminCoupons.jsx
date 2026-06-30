@@ -69,7 +69,7 @@ export default function AdminCoupons() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Coupons</h1>
-        <button onClick={openAdd} className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover">
+        <button onClick={openAdd} className="flex items-center gap-2 bg-accent text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-accent-hover">
           <Plus className="w-4 h-4" /> Add Coupon
         </button>
       </div>
