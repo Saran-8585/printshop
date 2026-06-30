@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import { ShoppingCart, User, LogOut, Package, Layers } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Package, Layers, ClipboardList } from 'lucide-react';
 
 const categories = [
   { name: 'Posters', slug: 'posters', color: 'bg-indigo-600' },
@@ -65,9 +65,14 @@ export default function Navbar() {
                       <Package className="w-4 h-4" /> Admin Dashboard
                     </Link>
                   ) : (
-                    <Link to="/account" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
-                      <User className="w-4 h-4" /> My Account
-                    </Link>
+                    <>
+                      <Link to="/orders" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
+                        <ClipboardList className="w-4 h-4" /> My Orders
+                      </Link>
+                      <Link to="/account" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
+                        <User className="w-4 h-4" /> My Account
+                      </Link>
+                    </>
                   )}
                   <button
                     onClick={handleLogout}

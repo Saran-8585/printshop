@@ -109,8 +109,8 @@ export default function ProductListing() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map(product => (
                 <Link
-                  key={product.id}
-                  to={`/product/${product.id}`}
+                  key={product._id}
+                  to={`/product/${product._id}`}
                   className="group bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
                 >
                   <div className="h-44 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
@@ -128,6 +128,9 @@ export default function ProductListing() {
                       <span className="text-xs text-gray-500">({product.total_reviews})</span>
                     </div>
                     <h3 className="font-semibold text-gray-900 group-hover:text-accent transition-colors">{product.name}</h3>
+                    {product.description && (
+                      <p className="text-xs text-gray-400 mt-1 line-clamp-2">{product.description.substring(0, 80)}{product.description.length > 80 ? '...' : ''}</p>
+                    )}
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-accent font-bold text-lg">From ₹{product.base_price}</span>
                       {product.order_count > 0 && (

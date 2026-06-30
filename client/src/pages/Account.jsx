@@ -129,7 +129,7 @@ export default function Account() {
                     </thead>
                     <tbody className="divide-y">
                       {orders.map(order => (
-                        <tr key={order.id} className="hover:bg-gray-50">
+                        <tr key={order._id} className="hover:bg-gray-50">
                           <td className="px-4 py-3 font-mono text-xs">{order.order_number}</td>
                           <td className="px-4 py-3 text-gray-500">{new Date(order.created_at).toLocaleDateString()}</td>
                           <td className="px-4 py-3">{order.items_count}</td>
@@ -146,7 +146,7 @@ export default function Account() {
                                 <Eye className="w-4 h-4" />
                               </button>
                               {order.status === 'pending' && (
-                                <button onClick={() => handleCancel(order.id)} className="text-red-500 hover:text-red-700">
+                                <button onClick={() => handleCancel(order._id)} className="text-red-500 hover:text-red-700">
                                   <X className="w-4 h-4" />
                                 </button>
                               )}
@@ -174,11 +174,11 @@ export default function Account() {
                     <p className="text-sm text-gray-500">{new Date(selectedOrder.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={() => downloadInvoice(selectedOrder.id)} className="flex items-center gap-1 text-sm text-accent border border-accent px-3 py-1.5 rounded-lg hover:bg-accent/5">
+                    <button onClick={() => downloadInvoice(selectedOrder._id)} className="flex items-center gap-1 text-sm text-accent border border-accent px-3 py-1.5 rounded-lg hover:bg-accent/5">
                       <FileText className="w-3.5 h-3.5" /> Invoice
                     </button>
                     {selectedOrder.status === 'pending' && (
-                      <button onClick={() => handleCancel(selectedOrder.id)} className="text-sm text-red-500 border border-red-200 px-3 py-1.5 rounded-lg hover:bg-red-50">
+                      <button onClick={() => handleCancel(selectedOrder._id)} className="text-sm text-red-500 border border-red-200 px-3 py-1.5 rounded-lg hover:bg-red-50">
                         Cancel
                       </button>
                     )}
@@ -389,7 +389,7 @@ function ReviewsSection() {
         ) : (
           <div className="space-y-3">
             {reviews.map(r => (
-              <div key={r.id} className="bg-gray-50 rounded-lg p-4">
+              <div key={r._id} className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map(i => (

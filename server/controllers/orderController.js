@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Order from '../models/Order.js';
 import OrderItem from '../models/OrderItem.js';
 import OrderStatusHistory from '../models/OrderStatusHistory.js';
@@ -93,7 +94,7 @@ export async function createOrder(req, res) {
 export async function getMyOrders(req, res) {
   try {
     const orders = await Order.aggregate([
-      { $match: { user: req.user.id } },
+      { $match: { user: new mongoose.Types.ObjectId(req.user.id) } },
       { $lookup: { from: 'orderitems', localField: '_id', foreignField: 'order', as: 'items' } },
       { $addFields: { items_count: { $size: '$items' } } },
       { $project: { items: 0 } },
@@ -185,7 +186,7 @@ export async function updateOrderStatus(req, res) {
 
 export async function cancelOrder(req, res) {
   try {
-    const order = await Order.findOne({ _id: req.params.id, user: req.user.id });
+    const order = await Order.findOne({ _id: req.params.id, user: new mongoose.Types.ObjectId(req.user.id) });
     if (!order) return res.status(404).json({ error: 'Order not found' });
     if (order.status !== 'pending') return res.status(400).json({ error: 'Only pending orders can be cancelled' });
     await Order.findByIdAndUpdate(req.params.id, { status: 'cancelled', updated_at: new Date() });

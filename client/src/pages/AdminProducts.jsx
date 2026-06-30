@@ -79,7 +79,7 @@ export default function AdminProducts() {
     if (!form.name || !form.base_price) { toast.error('Name and base price required'); return; }
     try {
       if (editing) {
-        await api.put(`/products/${editing.id}`, { ...form, base_price: Number(form.base_price) });
+        await api.put(`/products/${editing._id}`, { ...form, base_price: Number(form.base_price) });
         toast.success('Product updated');
       } else {
         await api.post('/products', { ...form, base_price: Number(form.base_price) });
@@ -139,6 +139,7 @@ export default function AdminProducts() {
                 <tr>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Name</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Category</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500">Description</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Base Price</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Variants</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Orders</th>
@@ -149,9 +150,14 @@ export default function AdminProducts() {
               </thead>
               <tbody className="divide-y">
                 {products.map(p => (
-                  <tr key={p.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium">{p.name}</td>
+                  <tr key={p._id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 font-medium max-w-[180px] truncate" title={p.name}>{p.name}</td>
                     <td className="px-4 py-3"><span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${catColor(p.category)}`}>{catLabel(p.category)}</span></td>
+                    <td className="px-4 py-3 max-w-[200px]">
+                      <span className="text-xs text-gray-500 truncate block" title={p.description || ''}>
+                        {p.description ? (p.description.length > 60 ? p.description.substring(0, 60) + '...' : p.description) : <span className="text-gray-300 italic">none</span>}
+                      </span>
+                    </td>
                     <td className="px-4 py-3">₹{p.base_price}</td>
                     <td className="px-4 py-3">
                       {(() => {
@@ -170,7 +176,7 @@ export default function AdminProducts() {
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
                         <button onClick={() => openEdit(p)} className="text-accent hover:text-accent-hover"><Edit2 className="w-4 h-4" /></button>
-                        <button onClick={() => toggleStatus(p.id)} className={`${p.status === 'active' ? 'text-gray-400' : 'text-green-500'} hover:opacity-70`}>
+                        <button onClick={() => toggleStatus(p._id)} className={`${p.status === 'active' ? 'text-gray-400' : 'text-green-500'} hover:opacity-70`}>
                           <Power className="w-4 h-4" />
                         </button>
                       </div>

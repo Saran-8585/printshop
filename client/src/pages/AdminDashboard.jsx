@@ -149,7 +149,7 @@ export default function AdminDashboard() {
             </thead>
             <tbody className="divide-y">
               {recentOrders.map(order => (
-                <tr key={order.id} className="hover:bg-gray-50">
+                <tr key={order._id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-mono text-xs">{order.order_number}</td>
                   <td className="px-4 py-3">{order.customer_name}</td>
                   <td className="px-4 py-3">{order.items_count}</td>

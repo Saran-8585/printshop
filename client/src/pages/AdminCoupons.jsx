@@ -45,7 +45,7 @@ export default function AdminCoupons() {
         max_uses: Number(form.max_uses || 0)
       };
       if (editing) {
-        await api.put(`/coupons/${editing.id}`, payload);
+        await api.put(`/coupons/${editing._id}`, payload);
         toast.success('Coupon updated');
       } else {
         await api.post('/coupons', payload);
@@ -97,7 +97,7 @@ export default function AdminCoupons() {
               </thead>
               <tbody className="divide-y">
                 {coupons.map(c => (
-                  <tr key={c.id} className="hover:bg-gray-50">
+                  <tr key={c._id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-mono font-medium text-xs">{c.code}</td>
                     <td className="px-4 py-3 capitalize">{c.discount_type}</td>
                     <td className="px-4 py-3">{c.discount_type === 'percentage' ? `${c.discount_value}%` : `₹${c.discount_value}`}</td>
@@ -113,7 +113,7 @@ export default function AdminCoupons() {
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
                         <button onClick={() => openEdit(c)} className="text-accent"><Edit2 className="w-4 h-4" /></button>
-                        <button onClick={() => deleteCoupon(c.id)} className="text-red-500"><Trash2 className="w-4 h-4" /></button>
+                        <button onClick={() => deleteCoupon(c._id)} className="text-red-500"><Trash2 className="w-4 h-4" /></button>
                       </div>
                     </td>
                   </tr>

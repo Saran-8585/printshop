@@ -103,7 +103,7 @@ export default function AdminOrders() {
               </thead>
               <tbody className="divide-y">
                 {orders.map(order => (
-                  <tr key={order.id} className="hover:bg-gray-50">
+                  <tr key={order._id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-mono text-xs">{order.order_number}</td>
                     <td className="px-4 py-3">{order.customer_name}</td>
                     <td className="px-4 py-3">{order.items_count}</td>
@@ -114,7 +114,7 @@ export default function AdminOrders() {
                       <div className="relative">
                         <select
                           value={order.status}
-                          onChange={e => updateStatus(order.id, e.target.value)}
+                          onChange={e => updateStatus(order._id, e.target.value)}
                           className={`appearance-none px-2 py-1 pr-6 rounded-full text-xs font-medium border-0 cursor-pointer ${statusColors[order.status] || 'bg-gray-100'}`}
                         >
                           {statuses.map(s => (
@@ -126,8 +126,8 @@ export default function AdminOrders() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
-                        <Link to={`/admin/orders/${order.id}`} className="text-accent text-xs hover:underline">View</Link>
-                        <button onClick={() => downloadInvoice(order.id)} className="text-gray-500 hover:text-gray-700">
+                        <Link to={`/admin/orders/${order._id}`} className="text-accent text-xs hover:underline">View</Link>
+                        <button onClick={() => downloadInvoice(order._id)} className="text-gray-500 hover:text-gray-700">
                           <Download className="w-3.5 h-3.5" />
                         </button>
                       </div>

@@ -32,6 +32,9 @@ export async function listProducts(req, res) {
 
 export async function getProduct(req, res) {
   try {
+    if (!req.params.id || req.params.id === 'undefined' || req.params.id.length !== 24) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: 'Product not found' });
     res.json(product.toObject());
@@ -95,6 +98,9 @@ export async function toggleProductStatus(req, res) {
 
 export async function getProductReviews(req, res) {
   try {
+    if (!req.params.id || req.params.id === 'undefined' || req.params.id.length !== 24) {
+      return res.status(400).json({ error: 'Invalid product ID' });
+    }
     const reviews = await Review.find({ product: req.params.id })
       .populate('user', 'name')
       .sort({ created_at: -1 });

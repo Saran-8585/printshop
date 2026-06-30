@@ -90,6 +90,7 @@ export default function ProductDetail() {
   const quantityOptions = [1, 5, 10, 25, 50, 100];
 
   useEffect(() => {
+    if (!id || id === 'undefined') { setLoading(false); return; }
     setLoading(true);
     api.get(`/products/${id}`).then(({ data }) => {
       setProduct(data);
@@ -179,7 +180,7 @@ export default function ProductDetail() {
     }
     if (!pricing) return;
     addItem({
-      product_id: product.id,
+      product_id: product._id,
       product_name: product.name,
       category: product.category,
       configuration: config,
@@ -294,7 +295,7 @@ export default function ProductDetail() {
                   <p className="text-gray-500 text-sm">No reviews yet. Be the first to review!</p>
                 ) : (
                   reviews.map(r => (
-                    <div key={r.id} className="bg-gray-50 rounded-lg p-4">
+                    <div key={r._id} className="bg-gray-50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 bg-accent/10 rounded-full flex items-center justify-center text-xs font-semibold text-accent">

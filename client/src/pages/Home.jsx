@@ -133,8 +133,8 @@ export default function Home() {
             <div className="flex gap-6 overflow-x-auto pb-4 snap-x">
               {bestSellers.slice(0, 6).map(product => (
                 <Link
-                  key={product.id}
-                  to={`/product/${product.id}`}
+                  key={product._id}
+                  to={`/product/${product._id}`}
                   className="bg-white rounded-xl border border-gray-100 p-5 min-w-[200px] snap-start hover:shadow-md transition-shadow shrink-0"
                 >
                   <div className="w-full h-32 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center mb-4 text-sm text-gray-400 font-medium">
@@ -144,8 +144,11 @@ export default function Home() {
                     <StarRating rating={Math.round(product.avg_rating)} />
                     <span className="text-xs text-gray-500 ml-1">({product.total_reviews})</span>
                   </div>
-                  <h3 className="font-semibold text-sm mb-1 truncate">{product.name}</h3>
-                  <p className="text-accent font-bold">From ₹{product.base_price}</p>
+                  <h3 className="font-semibold text-sm truncate">{product.name}</h3>
+                  {product.description && (
+                    <p className="text-xs text-gray-400 mt-0.5 truncate">{product.description.substring(0, 80)}{product.description.length > 80 ? '...' : ''}</p>
+                  )}
+                  <p className="text-accent font-bold mt-1">From ₹{product.base_price}</p>
                 </Link>
               ))}
             </div>
